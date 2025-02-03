@@ -1,5 +1,7 @@
 const { AuthService } = require('../service/index');
 
+console.log('AuthService:', AuthService);
+
 class LoginRepository {
   // Routes will call repos, Repo will be a single responsibility class
   static async login(req, res) {
@@ -12,4 +14,4 @@ class LoginRepository {
   }
 }
 
-module.exports = { LoginRepository };
+module.exports = LoginRepository;

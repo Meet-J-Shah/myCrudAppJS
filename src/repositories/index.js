@@ -1,6 +1,6 @@
 console.log('From the repo');
-const register = require('./register');
+const RegisterRepository = require('./register');
 const LoginRepository = require('./login');
-const userList = require('./userList');
+const UserListRepository = require('./userList');
 
-module.exports = { register, LoginRepository, userList };
+module.exports = { RegisterRepository, LoginRepository, UserListRepository };

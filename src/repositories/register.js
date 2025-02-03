@@ -1,4 +1,4 @@
-const { AuthService } = require('../service');
+const { AuthService } = require('../service/index');
 
 class RegisterRepository {
   // Routes will call repos, Repo will be a single responsibility class
@@ -12,4 +12,4 @@ class RegisterRepository {
   }
 }
 
-module.exports = { RegisterRepository };
+module.exports = RegisterRepository;

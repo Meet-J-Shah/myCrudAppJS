@@ -14,4 +14,4 @@ class UserListRepository {
   }
 }
 
-module.exports = { UserListRepository };
+module.exports = UserListRepository;

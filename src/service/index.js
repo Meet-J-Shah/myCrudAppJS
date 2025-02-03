@@ -1,6 +1,7 @@
 console.log('In a Service');
 
-const auth = require('./auth');
+const { AuthService } = require('./auth');
+//const auth = require('./auth');
 const user = require('./user');
 
-module.exports = { auth, user };
+module.exports = { AuthService, user };

@@ -8,6 +8,7 @@ const routes = require('./routes');
 
 // Importing database models
 const db = require('./models');
+//console.log('db:', db);
 const environmentConfig = require('./constants/environment.constant');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -24,14 +25,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(routes);
 app.use(errors());
 
-app.listen = async function listen() {
-  await db.authenticate();
+app.listen(environmentConfig.PORT, async () => {
+  await db.sequelize.authenticate();
   console.log('Connection has been established successfully.');
   await db.sequelize.sync({ force: false });
-  this.app.listen(environmentConfig.PORT, () => {
-    console.log(`Server running on ${environmentConfig.PORT}`);
-  });
-  //export app
-};
+  console.log(`Server running on ${environmentConfig.PORT}`);
+});
 
 module.exports = app;

@@ -1,7 +1,11 @@
 const { Router } = require('express');
-const { LoginRepository, RegisterRepository } = require('../repositories/index.js');
+const { LoginRepository } = require('../repositories/index.js');
+const { RegisterRepository } = require('../repositories/index.js');
 const authSchema = require('../validation/auth.validate');
 const { celebrate } = require('celebrate');
+
+console.log('LoginRepository:', LoginRepository);
+console.log('RegisterRepository', RegisterRepository);
 
 const router = Router({ mergeParams: true });
 

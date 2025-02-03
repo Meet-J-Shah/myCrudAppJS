@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const { AuthFailureError, NotFoundError, BadRequestError, InternalError } = require('../utils/error.handler');
 const { SuccessResponse } = require('../utils/successResponse.handler');
 
+//console.log('AuthService file');
 class AuthService {
   static async login(req, res) {
     try {
@@ -60,5 +61,5 @@ class AuthService {
     }
   }
 }
-console.log('AuthService');
+console.log('AuthService2');
 module.exports = { AuthService };
