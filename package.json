@@ -4,12 +4,19 @@
   "description": "demo app in js",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky && husky install"
+    "prepare": "husky && husky install",
+    "lint":"eslint src/**/*.js"
   },
   "author": "Meet Shah",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.6.0",
     "git-format-staged": "^3.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
@@ -21,5 +28,6 @@
   },
   "lint-staged": {
     "*.{js,css,md}": "prettier --write"
+     
   }
 }
