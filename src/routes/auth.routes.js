@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { LoginRepository, RegisterRepository } = require('../repositories');
+const { LoginRepository, RegisterRepository } = require('../repositories/index.js');
 const authSchema = require('../validation/auth.validate');
 const { celebrate } = require('celebrate');
 
