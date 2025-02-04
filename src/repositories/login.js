@@ -1,6 +1,6 @@
 const { AuthService } = require('../service/index');
 
-console.log('AuthService:', AuthService);
+//console.log('AuthService:', AuthService);
 
 class LoginRepository {
   // Routes will call repos, Repo will be a single responsibility class

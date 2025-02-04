@@ -6,7 +6,7 @@ const { verifyUser } = require('../middleware');
 //const authSchema = require('../validation/auth.validate');
 
 //const { celebrate } = require('celebrate');
-console.log('UserListRepository:', UserListRepository);
+// console.log('UserListRepository:', UserListRepository);
 router.get('/userlist', verifyUser, UserListRepository.getUserList);
 
 module.exports = router;

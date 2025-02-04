@@ -5,7 +5,7 @@ dotenv.config({
   path: path.resolve('../myCrudAppJS/.env'),
 });
 // eslint-disable-next-line no-undef
-console.log(process.env.PORT);
+//console.log(process.env.PORT);
 const environmentConfig = Object.freeze({
   // eslint-disable-next-line no-undef
   NODE_ENV: process.env.NODE_ENV ? process.env.NODE_ENV : 'development',

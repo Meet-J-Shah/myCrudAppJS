@@ -1,5 +1,5 @@
 const express = require('express');
-
+//const errorHandler=require('./utils/error.handler')
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -24,6 +24,13 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(routes);
 app.use(errors());
+
+app.use((err, req, res) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+//app.use(errorHandler);
 
 app.listen(environmentConfig.PORT, async () => {
   await db.sequelize.authenticate();

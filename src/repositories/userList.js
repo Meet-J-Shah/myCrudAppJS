@@ -8,8 +8,10 @@ class UserListRepository {
     try {
       // Write computing operations here
       return UserService.getUserList(req, res);
-    } catch (err) {
-      return err;
+    } catch (error) {
+      return res
+        .status(error.code)
+        .json({ msg: error.message, name: error.name, data: error.data, stack: error.stack });
     }
   }
 }

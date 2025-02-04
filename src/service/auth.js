@@ -10,13 +10,15 @@ const { SuccessResponse } = require('../utils/successResponse.handler');
 class AuthService {
   static async login(req, res) {
     try {
+      //console.log(BadRequestError);
       const { email, password } = req.body;
       if (!email || !password) {
         throw new BadRequestError('400', 'validation failed');
       }
 
       const users = await User.findOne({ where: { email: email } });
-      if (!users) {
+      //console.log(users);
+      if (users === null) {
         throw new NotFoundError('404', 'Not Found');
       } else {
         const passwordMatched = bcrypt.compareSync(password, users.password);
@@ -33,7 +35,10 @@ class AuthService {
         }
       }
     } catch (error) {
-      return error;
+      //console.log(error);
+      return res
+        .status(error.code)
+        .json({ msg: error.message, name: error.name, data: error.data, stack: error.stack });
     }
   }
   static async register(req, res) {
@@ -41,15 +46,22 @@ class AuthService {
       const { email, password, role } = req.body;
 
       const users = await User.findOne({ where: { email: email } });
+      //console.log(users);
       if (users) {
+        //console.log("e1");
+        //console.log(NotFoundError);
         throw new NotFoundError('404', 'User already exist..!');
       } else {
+        //console.log("s1");
         const hashPassword = await bcrypt.hashSync(password, 12);
         const newuser = await User.create({
           email,
           password: hashPassword,
           role,
         });
+        //console.log(newuser);
+        //console.log(SuccessResponse);
+
         if (!newuser) {
           throw new InternalError('500', 'Internal Error');
         } else {
@@ -57,9 +69,12 @@ class AuthService {
         }
       }
     } catch (error) {
-      return error;
+      return res
+        .status(error.code)
+        .json({ msg: error.message, name: error.name, data: error.data, stack: error.stack });
     }
   }
 }
-console.log('AuthService2');
+//console.log(BadRequestError);
+//console.log('AuthService2');
 module.exports = { AuthService };

@@ -1,7 +1,11 @@
 class BaseError extends Error {
   constructor(code, message, data) {
     super(message);
-    Error.captureStackTrace(this, this.constructor);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    } else {
+      this.stack = new Error(message).stack;
+    }
     this.name = this.constructor.name;
     this.code = code;
     this.data = data;

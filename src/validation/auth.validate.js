@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const { celebrate, Joi, errors, Segments } = require('celebrate');
-console.log('auth validator');
+//console.log('auth validator');
 const SigninSchema = {
   body: {
     email: Joi.string().email().required(),

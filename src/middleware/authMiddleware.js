@@ -8,30 +8,34 @@ const verifyToken = () => {
 };
 
 const verifyUser = async (req, res, next) => {
-  const { authorization } = req.headers;
-  if (!authorization) {
-    throw new AuthFailureError('401', 'Invalid Token..!');
-  }
+  try {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      throw new AuthFailureError('401', 'Invalid Token..!');
+    }
 
-  const scheme = authorization.split(' ')[0];
-  if (scheme !== 'Bearer') {
-    throw new AuthFailureError('401', 'Invalid Token..!');
+    const scheme = authorization.split(' ')[0];
+    if (scheme !== 'Bearer') {
+      throw new AuthFailureError('401', 'Invalid Token..!');
+    }
+    const token = authorization.split(' ')[1];
+    console.log('Token:', token);
+    jwt.verify(token, environmentConfig.JWT_SECRET, async (err, payload) => {
+      if (err) {
+        throw new AuthFailureError('401', 'Inavalid username or password..!');
+      }
+      const { id } = payload;
+      const user = await User.findOne({ where: { id } });
+      if (user) {
+        req.user = user;
+        next();
+      } else {
+        throw new AuthFailureError('401', 'User not found..!');
+      }
+    });
+  } catch (error) {
+    return res.status(error.code).json({ msg: error.message, name: error.name, data: error.data, stack: error.stack });
   }
-  const token = authorization.split(' ')[1];
-  console.log('Token:', token);
-  jwt.verify(token, environmentConfig.JWT_SECRET, async (err, payload) => {
-    if (err) {
-      throw new AuthFailureError('401', 'Inavalid username or password..!');
-    }
-    const { id } = payload;
-    const user = await User.findOne({ where: { id } });
-    if (user) {
-      req.user = user;
-      next();
-    } else {
-      throw new AuthFailureError('401', 'User not found..!');
-    }
-  });
 };
 
 const verifyAdmin = async (req, res, next) => {
