@@ -46,12 +46,26 @@ app.use(routes);
 //app.use(errors());
 
 app.use(errorCatcher);
-
-app.use((err, req, res) => {
+/* eslint-disable no-unused-vars */
+app.use((err, req, res, next) => {
   // ✅ Add next parameter
   console.log(err.stack);
+
+  // Check if the error is an instance of BaseError (custom error)
+  /* eslint-disable no-undef */
+  if (err instanceof BaseError) {
+    return res.status(err.code || 500).json({
+      error: err.name,
+      message: err.message,
+      data: err.data,
+    });
+  }
+  /* eslint-enable no-undef */
+
+  // Default response for unhandled errors
   return res.status(500).send('Something broke!');
 });
+/* eslint-enable no-unused-vars */
 
 //app.use(errorHandler);
 
