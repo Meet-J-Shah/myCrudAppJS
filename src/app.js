@@ -23,7 +23,23 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 
 app.use(routes);
+
+// constructor(message = 'Validation failed', opts = {}) {
+//   super(message);
+//   this.details = new internals.Details();
+//   this[internals.CELEBRATED] = Boolean(opts.celebrated);
+// }
+
 app.use(errors());
+
+// app.use((err, req, res,next) => {
+
+//   console.error(err.stack);
+//   if (!isCelebrate(err)) {
+//     return next(err);
+//   }
+
+// });
 
 app.use((err, req, res) => {
   console.error(err.stack);

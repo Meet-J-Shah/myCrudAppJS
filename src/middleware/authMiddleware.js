@@ -34,7 +34,8 @@ const verifyUser = async (req, res, next) => {
       }
     });
   } catch (error) {
-    return res.status(error.code).json({ msg: error.message, name: error.name, data: error.data, stack: error.stack });
+    console.log(` name:${error.name} \n data: ${error.data} \n stack:${error.stack}`);
+    return res.status(error.code).json({ msg: error.message });
   }
 };
 

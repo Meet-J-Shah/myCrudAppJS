@@ -1,4 +1,4 @@
-const { UserListRepository } = require('../repositories');
+const { UserService } = require('../service');
 const { Router } = require('express');
 const router = Router({ mergeParams: true });
 const { verifyUser } = require('../middleware');
@@ -7,6 +7,6 @@ const { verifyUser } = require('../middleware');
 
 //const { celebrate } = require('celebrate');
 // console.log('UserListRepository:', UserListRepository);
-router.get('/userlist', verifyUser, UserListRepository.getUserList);
+router.get('/userlist', verifyUser, UserService.getUserList);
 
 module.exports = router;

@@ -35,17 +35,15 @@ class AuthService {
         }
       }
     } catch (error) {
-      //console.log(error);
-      return res
-        .status(error.code)
-        .json({ msg: error.message, name: error.name, data: error.data, stack: error.stack });
+      console.log(` name:${error.name} \n data: ${error.data} \n stack:${error.stack}`);
+      return res.status(Number(error.code)).json({ msg: error.message });
     }
   }
   static async register(req, res) {
     try {
       const { email, password, role } = req.body;
 
-      const users = await User.findOne({ where: { email: email } });
+      const users = await User.findOne({ where: { email } });
       //console.log(users);
       if (users) {
         //console.log("e1");
