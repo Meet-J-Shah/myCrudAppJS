@@ -12,8 +12,10 @@ const db = require('./models');
 const environmentConfig = require('./constants/environment.constant');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const { errors } = require('celebrate');
-
+//const { errors } = require('celebrate');
+//const { isCelebrateError } = require('celebrate');
+const errorCatcher = require('./utils/error.catcher');
+//const CONSTANTS = require('./constants/constant');
 const app = express();
 
 //setting middlewares
@@ -22,28 +24,33 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 
+// console.log(CONSTANTS.RESPONSE_MESSAGES.SUCCESS); // Output: "Success"
+// console.log(CONSTANTS.RESPONSE_MESSAGES.NOT_FOUND); // Output: "Not Found"
+
 app.use(routes);
 
-// constructor(message = 'Validation failed', opts = {}) {
-//   super(message);
-//   this.details = new internals.Details();
-//   this[internals.CELEBRATED] = Boolean(opts.celebrated);
-// }
+// const errorHandler = (err, req, res, next) => {
+//   if (isCelebrateError(err)) {
+//       let errorMessage = 'Validation error';
 
-app.use(errors());
+//       for (const [, joiError] of err.details.entries()) {
+//           errorMessage = joiError.details.map(detail => detail.message).join(', ');
+//       }
 
-// app.use((err, req, res,next) => {
-
-//   console.error(err.stack);
-//   if (!isCelebrate(err)) {
-//     return next(err);
+//       return res.status(400).json({ error: errorMessage });
 //   }
+//   next();
+//   //return res.status(500).json({ error: 'Internal Server Error' });
+// };
 
-// });
+//app.use(errors());
+
+app.use(errorCatcher);
 
 app.use((err, req, res) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+  // ✅ Add next parameter
+  console.log(err.stack);
+  return res.status(500).send('Something broke!');
 });
 
 //app.use(errorHandler);

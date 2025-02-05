@@ -7,8 +7,8 @@ class BaseError extends Error {
       this.stack = new Error(message).stack;
     }
     this.name = this.constructor.name;
-    this.code = code;
-    this.data = data;
+    this.code = Number(code) || 500;
+    this.data = data || 'Error data not provided';
   }
 }
 

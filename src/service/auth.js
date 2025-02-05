@@ -8,7 +8,7 @@ const { SuccessResponse } = require('../utils/successResponse.handler');
 
 //console.log('AuthService file');
 class AuthService {
-  static async login(req, res) {
+  static async login(req, res, next) {
     try {
       //console.log(BadRequestError);
       const { email, password } = req.body;
@@ -35,11 +35,14 @@ class AuthService {
         }
       }
     } catch (error) {
-      console.log(` name:${error.name} \n data: ${error.data} \n stack:${error.stack}`);
-      return res.status(Number(error.code)).json({ msg: error.message });
+      // eslint-disable-next-line no-unused-vars
+      next(error);
+
+      // console.log(` name:${error.name} \n data: ${error.data} \n stack:${error.stack}`);
+      // return res.status(Number(error.code)).json({ msg: error.message });
     }
   }
-  static async register(req, res) {
+  static async register(req, res, next) {
     try {
       const { email, password, role } = req.body;
 
@@ -67,9 +70,11 @@ class AuthService {
         }
       }
     } catch (error) {
-      return res
-        .status(error.code)
-        .json({ msg: error.message, name: error.name, data: error.data, stack: error.stack });
+      next(error);
+
+      // return res
+      //   .status(error.code)
+      //   .json({ msg: error.message, name: error.name, data: error.data, stack: error.stack });
     }
   }
 }
