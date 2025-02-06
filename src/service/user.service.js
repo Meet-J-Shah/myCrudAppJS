@@ -1,5 +1,5 @@
 // const { Router, Request, Response, NextFunction } =require('express');
-
+const CONSTANTS = require('../constants/constant');
 const User = require('../models/user.model');
 const { NotFoundError } = require('../utils/error.handler');
 const { SuccessResponse } = require('../utils/successResponse.handler');
@@ -9,9 +9,21 @@ class UserService {
     try {
       const users = await User.findAll({ where: { role: 'user' }, attributes: ['id', 'email', 'role', 'createdAt'] });
       if (!users) {
-        throw new NotFoundError('404', 'Not Found');
+        throw new NotFoundError(
+          CONSTANTS.RESPONSE_CODES.NOT_FOUND,
+          CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_FOUND_LIST,
+        );
       } else {
-        return res.status(200).json(new SuccessResponse(true, '', 200, users));
+        return res
+          .status(CONSTANTS.RESPONSE_CODES.SUCCESS)
+          .json(
+            new SuccessResponse(
+              true,
+              CONSTANTS.RESPONSE_MESSAGES.USER_RESPONSES.USER_LIST,
+              CONSTANTS.RESPONSE_CODES.SUCCESS,
+              users,
+            ),
+          );
       }
     } catch (error) {
       // eslint-disable-next-line no-unused-vars
@@ -30,13 +42,14 @@ class UserService {
   // }
 
   // Get all users
+
   static async getUserListByAdmin() {
     try {
       // Get all users
       const users = await User.findAll();
       return users;
     } catch (error) {
-      throw new Error('Error fetching users');
+      throw new Error(CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_FETCH_USERS);
     }
   }
 
@@ -46,11 +59,11 @@ class UserService {
       // Find a user by primary key (id)
       const user = await User.findByPk(userId);
       if (!user) {
-        throw new NotFoundError('404', 'User not found');
+        throw new NotFoundError(CONSTANTS.RESPONSE_CODES.NOT_FOUND, CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_FOUND);
       }
       return user;
     } catch (error) {
-      throw new Error('Error fetching user');
+      throw new Error(CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_FETCH_USER);
     }
   }
 
@@ -60,13 +73,13 @@ class UserService {
       // Find user by id
       const user = await User.findByPk(userId);
       if (!user) {
-        throw new NotFoundError('404', 'User not found');
+        throw new NotFoundError(CONSTANTS.RESPONSE_CODES.NOT_FOUND, CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_FOUND);
       }
       // Update the user data
       await user.update(updatedData);
       return user;
     } catch (error) {
-      throw new Error('Error updating user');
+      throw new Error(CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_UPDATE);
     }
   }
 
@@ -76,12 +89,12 @@ class UserService {
       // Find the user
       const user = await User.findByPk(userId);
       if (!user) {
-        throw new NotFoundError('404', 'User not found');
+        throw new NotFoundError(CONSTANTS.RESPONSE_CODES.NOT_FOUND, CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_FOUND);
       }
       // Delete the user
       await user.destroy();
     } catch (error) {
-      throw new Error('Error deleting user');
+      throw new Error(CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_DELETE);
     }
   }
 }

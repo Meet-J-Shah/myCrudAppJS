@@ -3,6 +3,7 @@ const User = require('../models/user.model');
 const environmentConfig = require('../constants/environment.constant');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const CONSTANTS = require('../constants/constant');
 const { AuthFailureError, NotFoundError, BadRequestError, InternalError } = require('../utils/error.handler');
 const { SuccessResponse } = require('../utils/successResponse.handler');
 
@@ -13,17 +14,23 @@ class AuthService {
       //console.log(BadRequestError);
       const { email, password } = req.body;
       if (!email || !password) {
-        throw new BadRequestError('400', 'validation failed');
+        throw new BadRequestError(
+          CONSTANTS.RESPONSE_CODES.BAD_REQUEST,
+          CONSTANTS.ERROR_MESSAGES.USER_ERRORS.FAILED_VALIDATION,
+        );
       }
 
       const users = await User.findOne({ where: { email: email } });
       //console.log(users);
       if (users === null) {
-        throw new NotFoundError('404', 'Not Found');
+        throw new NotFoundError(CONSTANTS.RESPONSE_CODES.UNAUTHORIZED, CONSTANTS.ERROR_MESSAGES.USER_ERRORS.NOT_FOUND);
       } else {
         const passwordMatched = bcrypt.compareSync(password, users.password);
         if (!passwordMatched) {
-          throw new AuthFailureError('401', 'Unauthorized');
+          throw new AuthFailureError(
+            CONSTANTS.RESPONSE_CODES.UNAUTHORIZED,
+            CONSTANTS.ERROR_MESSAGES.USER_ERRORS.PWD_NOT_MATCHED,
+          );
         } else {
           const token = jwt.sign({ id: users.id, role: users.role }, environmentConfig.JWT_SECRET);
           const data = {
@@ -31,7 +38,16 @@ class AuthService {
             role: users.role,
             token: 'Bearer ' + token,
           };
-          return res.status(200).json(new SuccessResponse(true, 'Signin successfully', 200, data));
+          return res
+            .status(CONSTANTS.RESPONSE_CODES.SUCCESS)
+            .json(
+              new SuccessResponse(
+                true,
+                CONSTANTS.RESPONSE_MESSAGES.USER_RESPONSES.SIGN_SUCESS,
+                CONSTANTS.RESPONSE_CODES.SUCCESS,
+                data,
+              ),
+            );
         }
       }
     } catch (error) {
@@ -51,7 +67,7 @@ class AuthService {
       if (users) {
         //console.log("e1");
         //console.log(NotFoundError);
-        throw new NotFoundError('404', 'User already exist..!');
+        throw new NotFoundError(CONSTANTS.RESPONSE_CODES.NOT_FOUND, CONSTANTS.ERROR_MESSAGES.USER_ERRORS.USER_EXISTS);
       } else {
         //console.log("s1");
         const hashPassword = await bcrypt.hashSync(password, 12);
@@ -64,9 +80,20 @@ class AuthService {
         //console.log(SuccessResponse);
 
         if (!newuser) {
-          throw new InternalError('500', 'Internal Error');
+          throw new InternalError(
+            CONSTANTS.RESPONSE_CODES.INTERNAL_SERVER_ERROR,
+            CONSTANTS.RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR,
+          );
         } else {
-          return res.status(200).json(new SuccessResponse(true, 'New user registered successfully', 200));
+          return res
+            .status(CONSTANTS.RESPONSE_CODES.SUCCESS)
+            .json(
+              new SuccessResponse(
+                true,
+                CONSTANTS.RESPONSE_MESSAGES.USER_RESPONSES.REGISTER_SUCESS,
+                CONSTANTS.RESPONSE_CODES.SUCCESS,
+              ),
+            );
         }
       }
     } catch (error) {

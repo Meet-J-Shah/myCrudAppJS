@@ -5,7 +5,7 @@ const { BaseError } = require('../utils');
 // eslint-disable-next-line no-unused-vars
 const errorCatcher = (err, req, res, next) => {
   // eslint-disable-next-line no-unused-vars
-  console.log('Error caught in errorCatcher middleware:', err); // Log the error
+  //console.log('Error caught in errorCatcher middleware:', err); // Log the error
   console.log(err.stack); // Log the error stack
 
   // Handle validation errors from Celebrate (Joi)
@@ -32,7 +32,7 @@ const errorCatcher = (err, req, res, next) => {
 
   // Default internal server error
   return res.status(CONSTANTS.RESPONSE_CODES.INTERNAL_SERVER_ERROR).json({
-    error: 'InternalError',
+    error: CONSTANTS.RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR,
     message: CONSTANTS.ERROR_MESSAGES.SERVER_ERROR,
   });
 };

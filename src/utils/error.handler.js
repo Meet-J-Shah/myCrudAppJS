@@ -1,3 +1,4 @@
+const CONSTANTS = require('../constants/constant');
 class BaseError extends Error {
   constructor(code, message, data) {
     super(message);
@@ -8,7 +9,7 @@ class BaseError extends Error {
     }
     this.name = this.constructor.name;
     this.code = Number(code) || 500;
-    this.data = data || 'Error data not provided';
+    this.data = data || CONSTANTS.ERROR_MESSAGES.NO_ERROR_DATA;
   }
 }
 
@@ -17,6 +18,7 @@ class ForbiddenError extends BaseError {}
 class AuthFailureError extends BaseError {}
 class InternalError extends BaseError {}
 class NotFoundError extends BaseError {}
+class QueryError extends BaseError {}
 
 module.exports = {
   BaseError,
@@ -25,4 +27,5 @@ module.exports = {
   AuthFailureError,
   InternalError,
   NotFoundError,
+  QueryError,
 };
