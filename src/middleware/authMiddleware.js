@@ -50,10 +50,15 @@ const verifyUser = async (req, res, next) => {
 };
 
 const verifyAdmin = async (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
-    next();
-  } else {
-    return res.status(400).json({ message: 'You have no permission..!', status: 400 });
+  try {
+    if (req.user && req.user.role === 'admin') {
+      next();
+    } else {
+      return res.status(400).json({ message: 'You have no permission..!', status: 400 });
+    }
+  } catch (error) {
+    console.log('Error:', error); // Log the error for debugging
+    next(error); // Pass the error to global error handler
   }
 };
 

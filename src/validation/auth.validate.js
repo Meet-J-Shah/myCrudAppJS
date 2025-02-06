@@ -21,12 +21,37 @@ const SigninSchema = {
 const SignupSchema = {
   body: {
     email: Joi.string().email().required(),
-    password: Joi.string().required(),
+    password: Joi.string().required().pattern(new RegExp(regex)).messages({
+      'string.base': `Password should be a type of string`,
+      'string.empty': `Password must contain value`,
+      'string.pattern.base': `Password must have Minimum 8 and maximum 15 characters, at least one uppercase letter, one lowercase letter, one number and one special character:`,
+      'any.required': `Password is a required field`,
+    }),
     role: Joi.string().valid('admin', 'user').required(),
+  },
+};
+
+const validateId = {
+  [Segments.PARAMS]: {
+    id: Joi.number().min(1).max(100).required(),
+  },
+};
+
+const UpdateSchema = {
+  body: {
+    email: Joi.string().email().required(),
+    password: Joi.string().required().pattern(new RegExp(regex)).messages({
+      'string.base': `Password should be a type of string`,
+      'string.empty': `Password must contain value`,
+      'string.pattern.base': `Password must have Minimum 8 and maximum 15 characters, at least one uppercase letter, one lowercase letter, one number and one special character:`,
+      'any.required': `Password is a required field`,
+    }),
   },
 };
 
 module.exports = {
   SignupSchema,
   SigninSchema,
+  validateId,
+  UpdateSchema,
 };
