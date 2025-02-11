@@ -44,7 +44,7 @@
   },
   "lint-staged": {
     "*.{js,jsx}": [
-      "eslint ",
+      "eslint --ignore-pattern src/tests/** ",
       "prettier --write"
     ],
     "(*.css|*.js|*.jsx)": [
