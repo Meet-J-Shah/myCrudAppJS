@@ -4,7 +4,7 @@ import pluginJs from '@eslint/js';
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    ignores: ['.tests/'],
+    ignores: ['**/*.test/'],
     files: ['**/*.js'],
     languageOptions: { sourceType: 'commonjs' },
     rules: {
