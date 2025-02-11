@@ -67,7 +67,7 @@ class AuthService {
       if (users) {
         //console.log("e1");
         //console.log(NotFoundError);
-        throw new NotFoundError(CONSTANTS.RESPONSE_CODES.NOT_FOUND, CONSTANTS.ERROR_MESSAGES.USER_ERRORS.USER_EXISTS);
+        throw new NotFoundError(CONSTANTS.RESPONSE_CODES.EXISTS, CONSTANTS.ERROR_MESSAGES.USER_ERRORS.USER_EXISTS);
       } else {
         //console.log("s1");
         const hashPassword = await bcrypt.hashSync(password, 12);

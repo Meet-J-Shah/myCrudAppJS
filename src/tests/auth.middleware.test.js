@@ -1,21 +1,18 @@
 const { verifyUser, verifyAdmin } = require('../middleware');
-//const { User } = require('../models/user.model');
 const { AuthFailureError } = require('../utils/error.handler');
-const { CONSTANTS } = require('../constants/constant');
 const jwt = require('jsonwebtoken');
-const environmentConfig = require('../constants/environment.constant');
 
-//jest.mock('../models/user.model');
-jest.mock('jsonwebtoken');
 jest.mock('../models/user.model', () => ({
   findOne: jest.fn(),
 }));
+jest.mock('jsonwebtoken');
+
+const User = require('../models/user.model'); // Assign User after mocking
+
 describe('Auth Middleware', () => {
   let req, res, next;
-  let User;
 
   beforeEach(() => {
-    const User = require('../models/user.model'); // Import User after mocking
     req = { headers: {} };
     res = {
       status: jest.fn().mockReturnThis(),
@@ -25,7 +22,6 @@ describe('Auth Middleware', () => {
   });
 
   afterEach(() => {
-    // Reset mocks and clear timers
     jest.resetModules();
     jest.clearAllMocks();
   });
@@ -55,6 +51,7 @@ describe('Auth Middleware', () => {
     jwt.verify.mockImplementation((token, secret, cb) => {
       cb(null, { id: 1 });
     });
+
     User.findOne.mockResolvedValue(null);
     await verifyUser(req, res, next);
     expect(next).toHaveBeenCalledWith(expect.any(AuthFailureError));
@@ -65,16 +62,16 @@ describe('Auth Middleware', () => {
     jwt.verify.mockImplementation((token, secret, cb) => {
       cb(null, { id: 1 });
     });
+
     User.findOne.mockResolvedValue({ id: 1, email: 'test@example.com' });
     await verifyUser(req, res, next);
-    console.log('e1');
+
     expect(next).toHaveBeenCalledTimes(1);
     expect(req.user).toBeDefined();
   });
 
   it('should deny access for non-admin users', async () => {
     req.user = { role: 'user' };
-    console.log('e1');
     await verifyAdmin(req, res, next);
     expect(next).toHaveBeenCalledWith(expect.any(AuthFailureError));
   });

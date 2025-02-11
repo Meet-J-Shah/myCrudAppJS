@@ -9,12 +9,12 @@ jest.mock('../models/user.model', () => ({
   destroy: jest.fn(),
 }));
 
-const { UserController } = require('../controllers/userController');
+const { UserController } = require('../controllers');
 const { UserService } = require('../service');
 const { QueryError } = require('../utils/error.handler');
-const { CONSTANTS } = require('../constants/constant');
+const CONSTANTS = require('../constants/constant');
 
-jest.mock('../service/userService');
+jest.mock('../service');
 
 describe('UserController', () => {
   let req, res, next;
