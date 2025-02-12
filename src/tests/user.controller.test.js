@@ -69,5 +69,81 @@ describe('UserController', () => {
     expect(next).toHaveBeenCalledWith(expect.any(QueryError));
   });
 
-  // Add more test cases for updateUser, deleteUser, and error handling
+  it('should handle updateUserById error', async () => {
+    req.params.id = 1;
+    UserService.updateUser.mockRejectedValue(new Error('Database error'));
+    await UserController.updateUser(req, res, next);
+    expect(next).toHaveBeenCalledWith(expect.any(QueryError));
+  });
+  it('should handle deleteUser', async () => {
+    req.params.id = 1;
+    UserService.deleteUser.mockResolvedValue({ msg: 'deleted sucessfully' });
+    await UserController.deleteUser(req, res, next);
+    expect.objectContaining({
+      data: { msg: 'deleted sucessfully' },
+    });
+  });
+  it('should handle deleteUserById error', async () => {
+    req.params.id = 1;
+    UserService.deleteUser.mockRejectedValue(new Error('Database error'));
+    await UserController.deleteUser(req, res, next);
+    expect(next).toHaveBeenCalledWith(expect.any(QueryError));
+  });
+
+  it('should update a user successfully', async () => {
+    const userId = 1;
+    const updatedData = { email: 'updated@email.com' };
+    const mockUpdatedUser = {
+      id: userId,
+
+      email: 'updated@email.com',
+      // ... other user properties
+    };
+
+    UserService.updateUser.mockResolvedValueOnce(mockUpdatedUser);
+
+    const req = { params: { id: userId }, body: updatedData };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await UserController.updateUser(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        success: true,
+        data: mockUpdatedUser,
+      }),
+    );
+  });
+
+  it('should delete a user successfully', async () => {
+    const userId = 1;
+    const mockUsers = [
+      // ... array of user objects
+    ];
+
+    UserService.deleteUser.mockResolvedValueOnce(undefined);
+    UserService.getUserListByAdmin.mockResolvedValueOnce(mockUsers);
+
+    const req = { params: { id: userId } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await UserController.deleteUser(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        success: true,
+        data: mockUsers,
+      }),
+    );
+  });
 });

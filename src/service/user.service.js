@@ -1,4 +1,5 @@
-// const { Router, Request, Response, NextFunction } =require('express');
+// eslint-disable-next-line no-unused-vars
+const { Router, Request, Response, NextFunction } = require('express');
 const CONSTANTS = require('../constants/constant');
 const User = require('../models/user.model');
 const { NotFoundError } = require('../utils/error.handler');

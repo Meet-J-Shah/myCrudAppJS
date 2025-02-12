@@ -2,7 +2,7 @@ const request = require('supertest');
 const db = require('../models'); // Database connection
 const app = require('../app'); // Main app instance
 const authToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjksInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTMwNDMxMH0.jlHPzSo3Z6O06QPZfRhDGCo5QPD3xJUdG5wXXVoElZw';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczOTM1NTM2NH0.Np5pcLia-ZZhRcoMzftY9_8zcsIT6AApFs0VxZt4Q4k';
 let server;
 let agent;
 

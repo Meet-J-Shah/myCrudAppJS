@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const request = require('supertest');
 const db = require('../models');
 const app = require('../app');
@@ -72,9 +73,9 @@ describe('Auth Routes', () => {
 
     it('should return 409 if user already exists', async () => {
       const response = await agent.post('/auth/register').send({
-        email: 'test2@example.com',
+        email: 'shahmeet123@gmail.com',
         password: 'Meet@1234',
-        role: 'user',
+        role: 'admin',
       });
 
       expect(response.status).toBe(409);

@@ -1,8 +1,10 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 const { AuthService } = require('../service/auth.service');
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { AuthFailureError, NotFoundError, BadRequestError } = require('../utils/error.handler');
+const { AuthFailureError, NotFoundError, BadRequestError, InternalError } = require('../utils/error.handler');
 const { CONSTANTS } = require('../constants/constant');
 const environmentConfig = require('../constants/environment.constant');
 
@@ -67,5 +69,29 @@ describe('AuthService', () => {
     );
   });
 
-  // Add more test cases for register() method, error handling, etc.
+  // it('should throw error if user is already registered', async () => {
+  //   req.body = { email: 'test@example.com', password: 'password' };
+  //   User.findOne.mockResolvedValue({
+  //     id: 1,
+  //     email: 'test@example.com',
+  //     password: 'hashedPassword',
+  //   });
+  //   bcrypt.compareSync.mockReturnValue(true);
+  //   jwt.sign.mockReturnValue('valid_token');
+  //   await AuthService.register(req, res, next);
+  //   expect(next).toHaveBeenCalledWith(expect.any(AuthFailureError));
+  // });
+
+  it('should handle registration error: User already exists', async () => {
+    const req = { body: { email: 'existing@email.com', password: 'password', role: 'user' } };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await AuthService.register(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(expect.any(NotFoundError));
+  });
 });
